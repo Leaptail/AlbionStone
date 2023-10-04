@@ -1,0 +1,1 @@
+This is where i will make folders to store different images of diff items
