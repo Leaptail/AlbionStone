@@ -23,8 +23,7 @@ while(True):
     print('FPS {}'.format(1 / (time() - loop_time)))
     loop_time = time()
 
-    # press 'q' with the output window focused to exit.
-    # waits 1 ms every loop to process key presses
+    #loop breaker
     if cv.waitKey(1) == ord(terminalbutton):
         cv.destroyAllWindows()
         break

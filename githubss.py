@@ -5,7 +5,7 @@ import win32gui
 import win32ui
 
 # captures images from inactive windows : 
-# works on streamed or computers with dedicated gpus
+# now works!!! on streamed or computers with dedicated gpus
 
 def capture_win_alt(window_name: str):
     # Adapted from https://stackoverflow.com/questions/19695214/screenshot-of-inactive-window-printwindow-win32gui
@@ -41,15 +41,3 @@ def capture_win_alt(window_name: str):
         raise RuntimeError(f"Unable to acquire screenshot! Result: {result}")
 
     return img
-
-
-def main():
-
-    WINDOW_NAME = "PS Remote Play"
-    while cv2.waitKey(1) != ord('q'):
-        screenshot = capture_win_alt(WINDOW_NAME)
-        cv2.imshow('Computer Vision', screenshot)
-
-
-if __name__ == '__main__':
-    main()
