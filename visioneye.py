@@ -4,76 +4,40 @@ import pydirectinput
 import cv2 as cv
 import numpy as np
 
-"""
-result = cv.matchTemplate(haystack_img, needle_img, cv.TM_CCOEFF_NORMED)
-print(result)
+#use by find_obj then insert haystack img (livestream) and needle img(take from memory folder)
+# image, object, copnfidence threshold
+def Processed(hay,need,thresh):
 
-threshold = 0.3
-locations = np.where(result >= threshold)
-print(locations)
+    #inserting file names to use
+    #hay = cv.imread('screenshot.png',cv.IMREAD_UNCHANGED)
+    needle = cv.imread(need,cv.IMREAD_UNCHANGED)
 
-locations = list(zip(*locations[::-1]))
-print(locations)
+    #compares images to find spots with high and low confidence
+    result = cv.matchTemplate(hay, needle, cv.TM_CCOEFF_NORMED)
 
-if locations:
-    print('found')
+    #gets locations of all the different items above the confidence threshold
+    threshold = thresh
+    locations = np.where(result >= threshold)
 
-    needle_w = needle_img.shape[1]
-    needle_h = needle_img.shape[0]
-    line_color = (255,0,0)
-    line_type = cv.LINE_4
+    #turns it into an array of items with x and y coordinates
+    locations = list(zip(*locations[::-1]))
 
-    for loc in locations:
-        top_left = loc
-        bottom_right = (top_left[0]+needle_w,top_left[1]+needle_h)
-        cv.rectangle(haystack_img, top_left, bottom_right, line_color, line_type)
+    #basically if locations exist,
+    if locations:
+        #getting the size and shape of the box to draw the square around
+        #takes size of picture in memory
+        needle_w = needle.shape[1]
+        needle_h = needle.shape[0]
 
-    cv.imshow('Result', haystack_img)
-    cv.waitKey()
-else:
-    print('not found')
+        #color and type of line for the box
+        line_color = (255,0,0)
+        line_type = cv.LINE_4
 
+        #for loop that draws squares around all the possible locations
+        for loc in locations:
+            top_left = loc
+            bottom_right = (top_left[0]+needle_w,top_left[1]+needle_h)
+            img = cv.rectangle(hay, top_left, bottom_right, line_color, line_type)
 
-
-
-
-
-#Debug code
-#cv.imshow('Result', result)
-#cv.waitKey()
-
-"""
-
-
-
-
-
-
-
-
-
-#min max of brightest and darkest pixel, get best match position
-"""min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)
-
-print('%s' %str(max_loc))
-print('%s' %str(max_val))
-
-threshold = 0.8
-if max_val >= threshold:
-    print('found')
-
-    #get dimension of needle image
-    needle_w = needle_img.shape[1]
-    needle_h = needle_img.shape[0]
-
-    top_left = max_loc
-    bottom_right = (top_left[0] + needle_w, top_left[1] + needle_h)
-
-    cv.rectangle(haystack_img, top_left, bottom_right, color=(255,0,0), thickness=2, lineType=cv.LINE_4)
-    print('%d , %d' % top_left, bottom_right)
-
-    cv.imshow('Result', haystack_img)
-    cv.waitKey()
-
-else:
-    print('none')"""
+    #output the img with the boxes
+    cv.imshow('Vision', img)
