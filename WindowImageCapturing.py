@@ -7,7 +7,7 @@ import win32ui
 # captures images from inactive windows : 
 # now works!!! on streamed or computers with dedicated gpus
 
-def capture_win_alt(window_name: str):
+def capturewindow(window_name: str):
     # Adapted from https://stackoverflow.com/questions/19695214/screenshot-of-inactive-window-printwindow-win32gui
 
     img = None

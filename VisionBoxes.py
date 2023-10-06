@@ -6,7 +6,7 @@ import numpy as np
 
 #use by find_obj then insert haystack img (livestream) and needle img(take from memory folder)
 # image, object, copnfidence threshold
-def Processed(hay,need,thresh):
+def ProcessedImage(hay,need,thresh):
 
     #image to find
     needle = cv.imread(need,cv.IMREAD_UNCHANGED)
