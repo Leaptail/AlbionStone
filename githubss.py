@@ -34,13 +34,11 @@ def capture_win_alt(window_name: str):
     img = np.fromstring(bmpstr, dtype='uint8')
     img.shape = (bmpinfo["bmHeight"], bmpinfo["bmWidth"], 4)
     #img = np.frombuffer(bmpstr, dtype=np.uint8).reshape((bmpinfo["bmHeight"], bmpinfo["bmWidth"], 4))
-    img = np.ascontiguousarray(img)[..., :-1]  # make image C_CONTIGUOUS and drop alpha channel
-
-    #if not result:  # result should be 1
+    #img = np.ascontiguousarray(img)[..., :-1]  # make image C_CONTIGUOUS and drop alpha channel
+    
     win32gui.DeleteObject(bitmap.GetHandle())
     save_dc.DeleteDC()
     mfc_dc.DeleteDC()
     win32gui.ReleaseDC(hwnd, hwnd_dc)
-    #raise RuntimeError("Unable to acquire screenshot! Result: {result}")
-     
+    
     return img

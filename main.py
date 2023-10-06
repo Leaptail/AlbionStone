@@ -20,11 +20,8 @@ while(True):
     wincap = capture_win_alt(windowname)
 
     #time to add the green boxes here now
-    #points = vision_roughstone.find(wincap, 0.5, 'rectangles')
-    #Processed(wincap, 'Rock1.png', 0.6)
-    cv.imshow('Vision', wincap)
+    Processed(wincap, 'MemoryItems/Monument1.png', 0.4)
 
-    
     # loop speed so i can see how shitty the code runs (its pretty decent now)
     print('FPS {}'.format(1 / (time() - loop_time)))
     loop_time = time()

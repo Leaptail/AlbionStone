@@ -8,13 +8,12 @@ import numpy as np
 # image, object, copnfidence threshold
 def Processed(hay,need,thresh):
 
-    #inserting file names to use
-    #hay = cv.imread('screenshot.png',cv.IMREAD_UNCHANGED)
+    #image to find
     needle = cv.imread(need,cv.IMREAD_UNCHANGED)
 
-    #compares images to find spots with high and low confidence
-    result = cv.matchTemplate(hay, needle, cv.TM_CCOEFF_NORMED)
-
+    #compare vision with needle image
+    result = cv.matchTemplate(hay,needle,cv.TM_CCOEFF_NORMED)
+ 
     #gets locations of all the different items above the confidence threshold
     threshold = thresh
     locations = np.where(result >= threshold)
@@ -37,7 +36,6 @@ def Processed(hay,need,thresh):
         for loc in locations:
             top_left = loc
             bottom_right = (top_left[0]+needle_w,top_left[1]+needle_h)
-            img = cv.rectangle(hay, top_left, bottom_right, line_color, line_type)
-
+            hay = cv.rectangle(hay, top_left, bottom_right, line_color, line_type)
     #output the img with the boxes
-    cv.imshow('Vision', img)
+    cv.imshow('Vision', hay)
