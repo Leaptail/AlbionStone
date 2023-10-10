@@ -7,7 +7,7 @@ from threading import Thread
 from botactions import Actions, BotState
 from detector import Detection
 from ActiveCapture import capturewindow
-
+import win32gui
 # Terminates program when held
 terminalbutton = 'p'
 
@@ -19,7 +19,15 @@ loop_time = time()
 
 #Insert image you want to find here.
 #wincap = capturewindow(windowname)
-wincap,w,h = capturewindow2(windowname)
+wincap = capturewindow2(windowname)
+hwnd = win32gui.FindWindow(None, windowname)
+
+#get window size for later
+left, top, right, bottom = win32gui.GetClientRect(hwnd)
+w = right - left
+h = bottom - top
+
+
 detector = Detection('MemoryItems/RoughStone/RocknStone.PNG')
 bot = Actions((0,30),(w,h),'MemoryItems/RoughStone/RoughStoneTooltop.png')
 
