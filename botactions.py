@@ -2,6 +2,7 @@ import pydirectinput
 from VisionBoxes import Vision
 from threading import Thread, Lock
 from time import time
+import time
 import cv2 as cv
 from math import sqrt
 
@@ -86,7 +87,7 @@ class Actions:
 
     def clicknextPoint(self):
         if len(self.points)>0:
-            targets = self.targetsbydistance(self.points)
+            self.points = self.targetsbydistance(self.points)
             targeti = 0
             found = False
             while not found and targeti <  len(self.points):
