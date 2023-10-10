@@ -49,7 +49,7 @@ class Actions:
         self.prevscreen = self.screenshot.copy()
         return False
 
-    def updateScreeshot(self, screenshot):
+    def updateScreenshot(self, screenshot):
         self.lock.acquire()
         self.screenshot = screenshot
         self.lock.release()
