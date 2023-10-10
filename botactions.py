@@ -1,8 +1,7 @@
 import pydirectinput
 from VisionBoxes import Vision
 from threading import Thread, Lock
-from time import time
-import time
+from time import time, sleep
 import cv2 as cv
 from math import sqrt
 
@@ -95,7 +94,7 @@ class Actions:
                     break
                 target = self.points[targeti]
                 pydirectinput.moveTo(x=target[0],y=target[1])
-                time.sleep(1)
+                sleep(1)
                 if self.confirmtooltip():
                     found = True
                     pydirectinput.click()
@@ -121,7 +120,7 @@ class Actions:
                     pass
             elif self.state == BotState.MOVE:
                 if not self.stoppedmoving():
-                    time.sleep(0.5)
+                    sleep(0.5)
                 else:
                     self.lock.acquire()
                     self.state = BotState.MINE
