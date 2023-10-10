@@ -1,11 +1,12 @@
 import cv2 as cv
 import time
 from time import time
-from WindowImageCapturing import capturewindow
+from WindowImageCapturing import capturewindow2
 from VisionBoxes import Vision
 from threading import Thread
 from botactions import Actions
 from detector import Detection
+from ActiveCapture import capturewindow
 
 # Terminates program when held
 terminalbutton = 'p'
@@ -15,18 +16,26 @@ windowname = 'Albion Online Client'
 ##################################################################################################
 
 loop_time = time()
-detector = Detection()
+
+#Insert image you want to find here.
+wincap = capturewindow(windowname)
+detector = Detection('MemoryItems/RoughStone/RocknStone.PNG')
+bot = Actions((wincap.offsetx,wincap.offsety),(wincap.w,wincap.h),'MemoryItems/RoughStone/RoughStoneTooltop.png')
+
+wincap.start()
 detector.start()
+bot.start()
 
 while(True):
 
     # get an updated image of the game
-    wincap = capturewindow(windowname)
-    detector.update(wincap)
+    #wincap = capturewindow(windowname)
+    detector.update(wincap.screenshot)
 
     #get items
     PointsScreen = Vision.getPoints(detector.rectangles)
-    cv.imshow('Vision',Vision.ProcessImage(wincap,PointsScreen))
+    bot.update(wincap,PointsScreen)
+    cv.imshow('Vision',Vision.ProcessImage(wincap.screenshot,PointsScreen))
 
     #make new thread for bot
 
@@ -37,6 +46,8 @@ while(True):
     #loop breaker
     if cv.waitKey(1) == ord(terminalbutton):
         detector.stop()
+        bot.stop()
+        wincap.stop()
         cv.destroyAllWindows()
         break
 
