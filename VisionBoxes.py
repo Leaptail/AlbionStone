@@ -6,10 +6,13 @@ import numpy as np
 
 #use by find_obj then insert haystack img (livestream) and needle img(take from memory folder)
 # image, object, copnfidence threshold
-def ProcessedImage(hay,need,thresh):
+def ProcessedImage(hay,need,thresh,maxresult=10):
 
     #image to find
+    #getting the size and shape of the box to draw the square around
     needle = cv.imread(need,cv.IMREAD_UNCHANGED)
+    needle_w = needle.shape[1]
+    needle_h = needle.shape[0]
 
     #compare vision with needle image
     result = cv.matchTemplate(hay,needle,cv.TM_CCOEFF_NORMED)
@@ -20,22 +23,29 @@ def ProcessedImage(hay,need,thresh):
 
     #turns it into an array of items with x and y coordinates
     locations = list(zip(*locations[::-1]))
+    rectangles = []
+
+    #make array of rectangles
+    for loc in locations:
+        rect = [int(loc[0]),int(loc[1]),needle_w,needle_h]
+        rectangles.append(rect)
+
+    #group them together so no overlapping
+    rectangles, weights = cv.groupRectangles(rectangles, 1, 0.5)
+
+    #reduce rectangles to acceptable amounts
+    if len(rectangles) > maxresult:
+        rectangles = rectangles[:maxresult]
 
     #basically if locations exist,
-    if locations:
-        #getting the size and shape of the box to draw the square around
-        #takes size of picture in memory
-        needle_w = needle.shape[1]
-        needle_h = needle.shape[0]
+    if len(rectangles):
+        #color and type of line for the point
+        markerC = (255,0,255)
+        markerT = cv.MARKER_CROSS
 
-        #color and type of line for the box
-        line_color = (255,0,0)
-        line_type = cv.LINE_4
+        #for loop that draws points around all the possible locations
+        for (x,y,w,h) in rectangles:
+            cv.drawMarker(hay,(x+int(w/2),y+int(h/2)),markerC,markerT)
 
-        #for loop that draws squares around all the possible locations
-        for loc in locations:
-            top_left = loc
-            bottom_right = (top_left[0]+needle_w,top_left[1]+needle_h)
-            hay = cv.rectangle(hay, top_left, bottom_right, line_color, line_type)
     #output the img with the boxes
-    cv.imshow('Vision', hay)
+    return hay
