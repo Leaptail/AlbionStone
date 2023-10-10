@@ -18,23 +18,25 @@ windowname = 'Albion Online Client'
 loop_time = time()
 
 #Insert image you want to find here.
-wincap = capturewindow(windowname)
+#wincap = capturewindow(windowname)
+wincap,w,h = capturewindow2(windowname)
 detector = Detection('MemoryItems/RoughStone/RocknStone.PNG')
-bot = Actions((wincap.offsetx,wincap.offsety),(wincap.w,wincap.h),'MemoryItems/RoughStone/RoughStoneTooltop.png')
+bot = Actions((0,30),(w,h),'MemoryItems/RoughStone/RoughStoneTooltop.png')
 
-wincap.start()
+#wincap.start()
 detector.start()
 bot.start()
 
 while(True):
 
     # get an updated image of the game
+    wincap = capturewindow2(windowname)
     #wincap = capturewindow(windowname)
-    detector.update(wincap.screenshot)
+    detector.update(wincap)
 
     #get items
     PointsScreen = Vision.getPoints(detector.rectangles)
-    cv.imshow('Vision',Vision.ProcessImage(wincap.screenshot,PointsScreen))
+    cv.imshow('Vision',Vision.ProcessImage(wincap,PointsScreen))
 
     #make new thread for bot
     if bot.state == BotState.INITIAL:
@@ -48,10 +50,10 @@ while(True):
         # to verify the hover tooltip once it has moved the mouse to that position
         Pts = Vision.getPoints(detector.rectangles)
         bot.updatePoints(Pts)
-        bot.updateScreenshot(wincap.screenshot)
+        bot.updateScreenshot(wincap)
     elif bot.state == BotState.MOVING:
         # when moving, we need fresh screenshots to determine when we've stopped moving
-        bot.updateScreenshot(wincap.screenshot)
+        bot.updateScreenshot(wincap)
     elif bot.state == BotState.MINING:
         # nothing is needed while we wait for the mining to finish
         pass
@@ -64,7 +66,7 @@ while(True):
     if cv.waitKey(1) == ord(terminalbutton):
         detector.stop()
         bot.stop()
-        wincap.stop()
+        #wincap.stop()
         cv.destroyAllWindows()
         break
 
