@@ -78,7 +78,7 @@ class Actions:
         return targets
     
     def confirmtooltip(self):
-        result = cv.matchtemplate(self.screenshot,self.tooltipimage,cv.TM_CCOEFF_NORMED)
+        result = cv.matchTemplate(self.screenshot,self.tooltipimage,cv.TM_CCOEFF_NORMED)
         minV,maxV,minL,maxL = cv.minMaxLoc(result)
         if maxV>=self.TTthresh:
             return True
