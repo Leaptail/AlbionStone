@@ -34,7 +34,6 @@ while(True):
 
     #get items
     PointsScreen = Vision.getPoints(detector.rectangles)
-    bot.update(wincap,PointsScreen)
     cv.imshow('Vision',Vision.ProcessImage(wincap.screenshot,PointsScreen))
 
     #make new thread for bot
